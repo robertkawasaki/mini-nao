@@ -1,0 +1,4 @@
+# Area: Marketing
+name: e08_reviews_2025
+prompt: How many reviews were written in 2025?
+sql: SELECT COUNT(*) AS reviews_2025 FROM reviews WHERE date >= '2025-01-01' AND date < '2026-01-01'

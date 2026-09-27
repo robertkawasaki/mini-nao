@@ -1,0 +1,9 @@
+name: m04_peak_review_month_2025
+prompt: In 2025, which month (as a number from 1 to 12) had the most reviews, and how many?
+sql: |
+  SELECT EXTRACT(MONTH FROM date)::int AS month, COUNT(*) AS reviews
+  FROM reviews
+  WHERE date >= '2025-01-01' AND date < '2026-01-01'
+  GROUP BY 1
+  ORDER BY reviews DESC
+  LIMIT 1

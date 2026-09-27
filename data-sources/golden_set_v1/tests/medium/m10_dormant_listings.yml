@@ -1,0 +1,7 @@
+# Area: Supply
+name: m10_dormant_listings
+prompt: How many listings have at least one review but none since the start of 2024?
+sql: |
+  SELECT COUNT(*) AS dormant_listings
+  FROM listings
+  WHERE number_of_reviews > 0 AND last_review < '2024-01-01'

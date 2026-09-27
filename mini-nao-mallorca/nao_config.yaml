@@ -1,0 +1,50 @@
+# Configuration documentation:
+# https://docs.getnao.io/nao-agent/context-builder/configuration#nao_config-yaml
+
+project_name: mini-nao-mallorca
+databases:
+- type: postgres
+  name: supabase-mini-nao
+  include: []
+  exclude: []
+  allow_listed_only: false
+  exclude_columns: ["public.listings.host_name"]
+  templates:
+  - columns
+  - preview
+  # - profiling  -- Adds profiling of your data in agent context
+  # - query_history  -- Pulls most frequent queries / joins on each table
+  query_history_exclude_patterns: []
+  profiling:
+    refresh_policy: always
+    interval_days: 7
+  ai_summary:
+    refresh_policy: always
+    interval_days: 7
+  host: aws-1-eu-west-1.pooler.supabase.com
+  port: 5432
+  database: postgres
+  user: nao_reader.zshfatnvxudrpebzjsau
+  password: "{{ env('NAO_DB_PASSWORD') }}"
+repos: []
+# An LLM provider edited in the app (Settings > Project > Models) is stored in the app
+# database and takes precedence over this block until it is deleted there.
+llm:
+  providers:
+  - provider: anthropic
+    api_key: "{{ env('ANTHROPIC_API_KEY') }}"
+    models:
+      - id: claude-sonnet-4-6
+        default: true
+        settings:
+          temperature: 0
+      - id: claude-haiku-4-5
+  annotation_model: claude-haiku-4-5
+
+test:
+  models:
+    - "anthropic:claude-sonnet-4-6"
+  threads: 2
+  comparison:
+        rtol: 0.01
+        decimals: 2

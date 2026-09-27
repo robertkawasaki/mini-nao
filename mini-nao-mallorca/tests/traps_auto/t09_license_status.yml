@@ -1,0 +1,18 @@
+name: t09_license_status
+prompt: How many listings are there by tourist license status (registered, exempt, no regional entry, no data), based on the Mallorca regional registration?
+sql: |
+  WITH s AS (
+    SELECT CASE
+      WHEN license IS NULL THEN 'no_data'
+      WHEN position('Mallorca - Regional registration number' in license) = 0 THEN 'no_regional_entry'
+      WHEN substring(license from 'Mallorca - Regional registration number<br />([^<]*)') ILIKE 'exempt%' THEN 'exempt'
+      ELSE 'registered'
+    END AS st
+    FROM listings
+  )
+  SELECT
+    COUNT(*) FILTER (WHERE st = 'registered') AS registered,
+    COUNT(*) FILTER (WHERE st = 'exempt') AS exempt,
+    COUNT(*) FILTER (WHERE st = 'no_regional_entry') AS no_regional_entry,
+    COUNT(*) FILTER (WHERE st = 'no_data') AS no_data
+  FROM s

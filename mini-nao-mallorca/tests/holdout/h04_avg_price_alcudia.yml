@@ -1,0 +1,4 @@
+# h04_avg_price_alcudia.yml
+name: h04_avg_price_alcudia
+prompt: What is the average base nightly price in Alcúdia?
+sql: SELECT ROUND(AVG(price), 2) AS avg_price FROM listings WHERE neighbourhood = 'Alcúdia' AND price IS NOT NULL

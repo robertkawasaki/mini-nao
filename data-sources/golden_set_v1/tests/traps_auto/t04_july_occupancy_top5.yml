@@ -1,0 +1,15 @@
+# Area: Operations
+name: t04_july_occupancy_top5
+prompt: What was the occupancy rate in July for the 5 neighbourhoods with the most listings?
+sql: |
+  WITH top5 AS (
+    SELECT neighbourhood FROM listings
+    GROUP BY neighbourhood ORDER BY COUNT(*) DESC LIMIT 5
+  )
+  SELECT l.neighbourhood,
+         ROUND(100.0 * COUNT(*) FILTER (WHERE NOT c.available) / COUNT(*), 2) AS pct_unavailable_july
+  FROM calendar c
+  JOIN listings l ON l.id = c.listing_id
+  WHERE l.neighbourhood IN (SELECT neighbourhood FROM top5)
+    AND EXTRACT(MONTH FROM c.date) = 7
+  GROUP BY l.neighbourhood

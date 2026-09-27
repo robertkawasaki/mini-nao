@@ -1,0 +1,6 @@
+# Area: Supply
+name: m05_pct_listings_multi_hosts
+prompt: What percentage of listings belong to hosts with two or more listings?
+sql: |
+  SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE calculated_host_listings_count >= 2) / COUNT(*), 2) AS pct_listings_multi_listing_hosts
+  FROM listings

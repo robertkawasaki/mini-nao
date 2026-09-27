@@ -1,0 +1,22 @@
+# Area: Operations
+name: t04_july_occupancy_top5
+prompt: What was the occupancy rate in July 2026 for the 5 neighbourhoods with the most listings?
+sql: |
+  WITH top5 AS (
+    SELECT neighbourhood FROM listings
+    GROUP BY neighbourhood ORDER BY COUNT(*) DESC LIMIT 5
+  ),
+  july AS (
+    SELECT listing_id,
+           COUNT(*) AS nights,
+           COUNT(*) FILTER (WHERE NOT available) AS unavailable
+    FROM calendar
+    WHERE date >= '2026-07-01' AND date < '2026-08-01'
+    GROUP BY listing_id
+  )
+  SELECT l.neighbourhood,
+         ROUND(100.0 * SUM(j.unavailable) / SUM(j.nights), 2) AS pct_unavailable_july
+  FROM july j
+  JOIN listings l ON l.id = j.listing_id
+  WHERE l.neighbourhood IN (SELECT neighbourhood FROM top5)
+  GROUP BY l.neighbourhood

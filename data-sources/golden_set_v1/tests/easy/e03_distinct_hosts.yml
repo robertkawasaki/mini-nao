@@ -1,0 +1,4 @@
+# Area: Supply
+name: e03_distinct_hosts
+prompt: How many distinct hosts are there?
+sql: SELECT COUNT(DISTINCT host_id) AS distinct_hosts FROM listings

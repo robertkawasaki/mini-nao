@@ -1,0 +1,11 @@
+name: m12_fully_available_august
+prompt: How many listings have no unavailable night at all in August 2026?
+sql: |
+  SELECT COUNT(*) AS listings_fully_available_august
+  FROM (
+    SELECT listing_id
+    FROM calendar
+    WHERE date >= '2026-08-01' AND date < '2026-09-01'
+    GROUP BY listing_id
+    HAVING COUNT(*) FILTER (WHERE available) = 31
+  ) t

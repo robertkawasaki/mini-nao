@@ -1,0 +1,4 @@
+# h06_palma_never_reviewed.yml
+name: h06_palma_never_reviewed
+prompt: How many listings in Palma de Mallorca have never been reviewed?
+sql: SELECT COUNT(*) AS listings FROM listings WHERE neighbourhood = 'Palma de Mallorca' AND number_of_reviews = 0

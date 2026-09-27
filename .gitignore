@@ -1,0 +1,14 @@
+.venv/
+.env
+.env.*
+!.env.example
+**/__pycache__/
+*.pyc
+.nao/
+*.log
+.DS_Store
+Thumbs.db
+
+# Inside Airbnb dumps — download locally, do not publish
+data-sources/*.csv
+data-sources/*.csv.gz

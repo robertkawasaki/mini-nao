@@ -1,0 +1,13 @@
+# Area: Operations
+name: m08_fully_blocked_next_30_days
+prompt: How many listings are unavailable on every one of the first 30 days of the calendar?
+sql: |
+  WITH start AS (SELECT MIN(date) AS d FROM calendar)
+  SELECT COUNT(*) AS listings_fully_unavailable
+  FROM (
+    SELECT c.listing_id
+    FROM calendar c, start s
+    WHERE c.date >= s.d AND c.date < s.d + 30
+    GROUP BY c.listing_id
+    HAVING BOOL_AND(NOT c.available)
+  ) t

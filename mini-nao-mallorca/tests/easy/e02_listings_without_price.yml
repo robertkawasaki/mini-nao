@@ -1,0 +1,4 @@
+# Area: Supply
+name: e02_listings_without_price
+prompt: How many listings have no published price?
+sql: SELECT COUNT(*) AS listings_without_price FROM listings WHERE price IS NULL

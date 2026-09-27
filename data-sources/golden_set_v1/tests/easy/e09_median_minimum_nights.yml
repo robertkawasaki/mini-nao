@@ -1,0 +1,4 @@
+# Area: Operations
+name: e09_median_minimum_nights
+prompt: What is the median minimum stay, in nights, across all listings?
+sql: SELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY minimum_nights) AS median_minimum_nights FROM listings

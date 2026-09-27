@@ -1,0 +1,8 @@
+# Area: Finance
+name: m01_avg_price_room_type
+prompt: What is the average nightly price per room type, for listings that have a price?
+sql: |
+  SELECT room_type, ROUND(AVG(price), 2) AS avg_price
+  FROM listings
+  WHERE price IS NOT NULL
+  GROUP BY room_type

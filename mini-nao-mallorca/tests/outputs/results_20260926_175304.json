@@ -1,0 +1,1724 @@
+{
+  "timestamp": "2026-09-26T17:53:04.921555",
+  "results": [
+    {
+      "name": "m04_peak_review_month_2025",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 86477,
+      "cost": 0.038929950000000005,
+      "duration_ms": 16700,
+      "tool_call_count": 7,
+      "error": null,
+      "details": {
+        "response_text": "Month **6 (June)** had the most reviews in 2025, with <citation-number id=\"query_eed62bee\" column=\"review_count\">11,452</citation-number> reviews.",
+        "actual_data": [
+          {
+            "month": 6,
+            "reviews": 11452
+          }
+        ],
+        "expected_data": [
+          {
+            "month": 6,
+            "reviews": 11452
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "search",
+            "toolCallId": "toolu_01MQN2k5hwEAJnZZRe2LtiTu",
+            "args": {
+              "pattern": "databases/**/review*"
+            },
+            "result": {
+              "_version": "1",
+              "files": []
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01M4QHSt1XZnnqHHXGG5hniw",
+            "args": {
+              "path": "databases"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres",
+                  "name": "type=postgres",
+                  "type": "directory",
+                  "itemCount": 1
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01AhrEeuD7pHQ1Yzqv6aFW4P",
+            "args": {
+              "path": "databases/type=postgres"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres/database=postgres",
+                  "name": "database=postgres",
+                  "type": "directory",
+                  "itemCount": 1
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01RWJKbKyHrmCo3r9cXLKbQE",
+            "args": {
+              "path": "databases/type=postgres/database=postgres"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public",
+                  "name": "schema=public",
+                  "type": "directory",
+                  "itemCount": 3
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01KjKLyvt5C9LX4WY5ArvgRH",
+            "args": {
+              "path": "databases/type=postgres/database=postgres/schema=public"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar",
+                  "name": "table=calendar",
+                  "type": "directory",
+                  "itemCount": 4
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=listings",
+                  "name": "table=listings",
+                  "type": "directory",
+                  "itemCount": 4
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=reviews",
+                  "name": "table=reviews",
+                  "type": "directory",
+                  "itemCount": 4
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "read",
+            "toolCallId": "toolu_0138CaLa8usoBGnCqE7rLYuB",
+            "args": {
+              "file_path": "databases/type=postgres/database=postgres/schema=public/table=reviews/columns.md"
+            }
+          },
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01BfAJ8mGrGkrBWZAeiiVy3W",
+            "args": {
+              "sql_query": "\nSELECT EXTRACT(MONTH FROM date) AS month, COUNT(*) AS review_count\nFROM reviews\nWHERE EXTRACT(YEAR FROM date) = 2025\nGROUP BY month\nORDER BY review_count DESC\nLIMIT 1;\n",
+              "name": "Most reviews in 2025 by month"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "month": 6,
+                  "review_count": 11452
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "month",
+                "review_count"
+              ],
+              "dialect": "postgres",
+              "id": "query_eed62bee",
+              "applied_limit": 1
+            }
+          }
+        ],
+        "reference_sql": "SELECT EXTRACT(MONTH FROM date)::int AS month, COUNT(*) AS reviews\nFROM reviews\nWHERE date >= '2025-01-01' AND date < '2026-01-01'\nGROUP BY 1\nORDER BY reviews DESC\nLIMIT 1",
+        "verification_sql": "SELECT month, review_count AS reviews FROM query_eed62bee ORDER BY reviews DESC LIMIT 1"
+      }
+    },
+    {
+      "name": "m08_fully_blocked_next_30_days",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 113112,
+      "cost": 0.05856779999999999,
+      "duration_ms": 39716,
+      "tool_call_count": 11,
+      "error": null,
+      "details": {
+        "response_text": "**2,328 listings** are unavailable on every single one of the first 30 days of the calendar.",
+        "actual_data": [
+          {
+            "listings_fully_unavailable": 2328
+          }
+        ],
+        "expected_data": [
+          {
+            "listings_fully_unavailable": 2328
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01Hco5mk69GJ23LKbjufYE3t",
+            "args": {
+              "path": "databases/"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres",
+                  "name": "type=postgres",
+                  "type": "directory",
+                  "itemCount": 1
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01GqJMESjAD3yF1X46RasPS7",
+            "args": {
+              "path": "databases/type=postgres/database=postgres"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public",
+                  "name": "schema=public",
+                  "type": "directory",
+                  "itemCount": 3
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01PmxBY6LijgwZcjTkcFkxut",
+            "args": {
+              "path": "databases/type=postgres/database=postgres/schema=public"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar",
+                  "name": "table=calendar",
+                  "type": "directory",
+                  "itemCount": 4
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=listings",
+                  "name": "table=listings",
+                  "type": "directory",
+                  "itemCount": 4
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=reviews",
+                  "name": "table=reviews",
+                  "type": "directory",
+                  "itemCount": 4
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "read",
+            "toolCallId": "toolu_01Mufs2qPNvLnvy9hxCP7gJ3",
+            "args": {
+              "file_path": "databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md"
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01GMLgonRfHtYk4yo8osep8g",
+            "args": {
+              "path": "databases/type=postgres/database=postgres/schema=public/table=calendar"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/ai_summary.md",
+                  "name": "ai_summary.md",
+                  "type": "file",
+                  "size": "305"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/annotations.md",
+                  "name": "annotations.md",
+                  "type": "file",
+                  "size": "107"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "name": "columns.md",
+                  "type": "file",
+                  "size": "455"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/preview.md",
+                  "name": "preview.md",
+                  "type": "file",
+                  "size": "1391"
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "read",
+            "toolCallId": "toolu_01PwZdSnRfDtwXkGkMtesEJt",
+            "args": {
+              "file_path": "databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md"
+            }
+          },
+          {
+            "toolName": "read",
+            "toolCallId": "toolu_01GELeQkGMrmnB46pLiLpkUe",
+            "args": {
+              "file_path": "databases/type=postgres/database=postgres/schema=public/table=calendar/preview.md"
+            }
+          },
+          {
+            "toolName": "grep",
+            "toolCallId": "toolu_01CjUPYw9yQ9JRCorRzLgcVx",
+            "args": {
+              "pattern": ".",
+              "path": "databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md"
+            },
+            "result": {
+              "_version": "1",
+              "matches": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 1,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 1,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 1,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 1,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 4,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 4,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 4,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 4,
+                  "line_content": "---\r"
+                }
+              ],
+              "total_matches": 426,
+              "truncated": true
+            }
+          },
+          {
+            "toolName": "grep",
+            "toolCallId": "toolu_01NLfFfFny3KBPhT5B36ZKEB",
+            "args": {
+              "pattern": "column|available|date|listing",
+              "path": "databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+              "case_insensitive": true
+            },
+            "result": {
+              "_version": "1",
+              "matches": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 12,
+                  "line_content": "_No description available._\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 20,
+                  "line_content": "## Columns (5)\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 22,
+                  "line_content": "- listing_id (int64 NOT NULL)\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 23,
+                  "line_content": "- date (date NOT NULL)\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 23,
+                  "line_content": "- date (date NOT NULL)\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 24,
+                  "line_content": "- available (boolean NOT NULL)\r"
+                }
+              ],
+              "total_matches": 6,
+              "truncated": false
+            }
+          },
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01RSktkytKNBwC6mJa1mafaV",
+            "args": {
+              "sql_query": "\nWITH first_30_days AS (\n    SELECT DISTINCT date\n    FROM calendar\n    ORDER BY date\n    LIMIT 30\n),\nunavailable_per_listing AS (\n    SELECT\n        listing_id,\n        COUNT(DISTINCT date) AS unavailable_days\n    FROM calendar\n    WHERE available = false\n      AND date IN (SELECT date FROM first_30_days)\n    GROUP BY listing_id\n)\nSELECT COUNT(*) AS listings_unavailable_all_30_days\nFROM unavailable_per_listing\nWHERE unavailable_days = 30;\n",
+              "name": "Listings unavailable on all first 30 days"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "listings_unavailable_all_30_days": 2328
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "listings_unavailable_all_30_days"
+              ],
+              "dialect": "postgres",
+              "id": "query_a5e10a6b"
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_019aEygv299yVXCL5d9Dds9T",
+            "args": {
+              "suggestions": [
+                "What are the first 30 dates in the calendar?",
+                "Which neighborhoods have the most listings unavailable all 30 days?",
+                "What percentage of total listings does this represent?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "WITH start AS (SELECT MIN(date) AS d FROM calendar)\nSELECT COUNT(*) AS listings_fully_unavailable\nFROM (\n  SELECT c.listing_id\n  FROM calendar c, start s\n  WHERE c.date >= s.d AND c.date < s.d + 30\n  GROUP BY c.listing_id\n  HAVING COUNT(*) FILTER (WHERE NOT c.available) = 30\n) t",
+        "verification_sql": "SELECT listings_unavailable_all_30_days AS listings_fully_unavailable FROM query_a5e10a6b"
+      }
+    },
+    {
+      "name": "m12_fully_available_august",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 135866,
+      "cost": 0.06712875,
+      "duration_ms": 33622,
+      "tool_call_count": 13,
+      "error": null,
+      "details": {
+        "response_text": "There are **<citation-number id=\"query_e2e98409\" column=\"listings_fully_available\">1,618</citation-number>** listings with zero unavailable nights throughout all of August 2026 \u2014 meaning every single day in the month is marked as available for those listings.",
+        "actual_data": [
+          {
+            "listings_fully_available_august": 1618
+          }
+        ],
+        "expected_data": [
+          {
+            "listings_fully_available_august": 1618
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "search",
+            "toolCallId": "toolu_01BkgCxe6xka7UnrwQy2y2wR",
+            "args": {
+              "pattern": "databases/*/calendar*"
+            },
+            "result": {
+              "_version": "1",
+              "files": []
+            }
+          },
+          {
+            "toolName": "search",
+            "toolCallId": "toolu_01PDt31mgmshtwaDD9UYVPxy",
+            "args": {
+              "pattern": "databases/*/listings*"
+            },
+            "result": {
+              "_version": "1",
+              "files": []
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01W2j67nDhQ4BKwb4UjsPuem",
+            "args": {
+              "path": "databases"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres",
+                  "name": "type=postgres",
+                  "type": "directory",
+                  "itemCount": 1
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01QHikGCgT85vk5QZGUFX2B5",
+            "args": {
+              "path": "databases/type=postgres"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres/database=postgres",
+                  "name": "database=postgres",
+                  "type": "directory",
+                  "itemCount": 1
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01WvB2wh8E5CQL18aY87kcbx",
+            "args": {
+              "path": "databases/type=postgres/database=postgres"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public",
+                  "name": "schema=public",
+                  "type": "directory",
+                  "itemCount": 3
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01CKf6ERNgVknRAcc2W8SSzj",
+            "args": {
+              "path": "databases/type=postgres/database=postgres/schema=public"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar",
+                  "name": "table=calendar",
+                  "type": "directory",
+                  "itemCount": 4
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=listings",
+                  "name": "table=listings",
+                  "type": "directory",
+                  "itemCount": 4
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=reviews",
+                  "name": "table=reviews",
+                  "type": "directory",
+                  "itemCount": 4
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "read",
+            "toolCallId": "toolu_018f5Ru654uNexDm9kWZZP6u",
+            "args": {
+              "file_path": "databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md"
+            }
+          },
+          {
+            "toolName": "list",
+            "toolCallId": "toolu_01UeQaLLqZ5ydVZo7Soi1SR2",
+            "args": {
+              "path": "databases/type=postgres/database=postgres/schema=public/table=calendar"
+            },
+            "result": {
+              "_version": "1",
+              "entries": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/ai_summary.md",
+                  "name": "ai_summary.md",
+                  "type": "file",
+                  "size": "305"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/annotations.md",
+                  "name": "annotations.md",
+                  "type": "file",
+                  "size": "107"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "name": "columns.md",
+                  "type": "file",
+                  "size": "455"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/preview.md",
+                  "name": "preview.md",
+                  "type": "file",
+                  "size": "1391"
+                }
+              ]
+            }
+          },
+          {
+            "toolName": "read",
+            "toolCallId": "toolu_01Jwb3qdHQ4pCBqGseJUEr6Q",
+            "args": {
+              "file_path": "databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md"
+            }
+          },
+          {
+            "toolName": "grep",
+            "toolCallId": "toolu_01PJF8Q3bxbt6HqGyeAJgWEv",
+            "args": {
+              "pattern": ".",
+              "path": "databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md"
+            },
+            "result": {
+              "_version": "1",
+              "matches": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 1,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 1,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 1,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 1,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 2,
+                  "line_content": "type: generated\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 3,
+                  "line_content": "comment: This file is managed and generated by the agent, do not modify it!\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 4,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 4,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 4,
+                  "line_content": "---\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 4,
+                  "line_content": "---\r"
+                }
+              ],
+              "total_matches": 426,
+              "truncated": true
+            }
+          },
+          {
+            "toolName": "grep",
+            "toolCallId": "toolu_01RQ2dEBEae6SUehhmVkET7u",
+            "args": {
+              "pattern": "available|date|listing|column",
+              "path": "databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+              "case_insensitive": true,
+              "max_results": 30
+            },
+            "result": {
+              "_version": "1",
+              "matches": [
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 12,
+                  "line_content": "_No description available._\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 20,
+                  "line_content": "## Columns (5)\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 22,
+                  "line_content": "- listing_id (int64 NOT NULL)\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 23,
+                  "line_content": "- date (date NOT NULL)\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 23,
+                  "line_content": "- date (date NOT NULL)\r"
+                },
+                {
+                  "path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md",
+                  "line_number": 24,
+                  "line_content": "- available (boolean NOT NULL)\r"
+                }
+              ],
+              "total_matches": 6,
+              "truncated": false
+            }
+          },
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01STQsfNxD6AWYrR1vw7RyMp",
+            "args": {
+              "sql_query": "\nSELECT COUNT(DISTINCT listing_id) AS listings_fully_available\nFROM calendar\nWHERE date >= '2026-08-01' AND date <= '2026-08-31'\n  AND listing_id NOT IN (\n    SELECT DISTINCT listing_id\n    FROM calendar\n    WHERE date >= '2026-08-01' AND date <= '2026-08-31'\n      AND available = false\n  )\n",
+              "name": "Listings with no unavailable nights in August 2026"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "listings_fully_available": 1618
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "listings_fully_available"
+              ],
+              "dialect": "postgres",
+              "id": "query_e2e98409"
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01RDAKEF8smDdKkdpK4UsvkV",
+            "args": {
+              "suggestions": [
+                "What percentage of total listings does this represent?",
+                "How many listings are fully booked (all nights unavailable) in August 2026?",
+                "Show the distribution of unavailable nights in August 2026 across all listings."
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT COUNT(*) AS listings_fully_available_august\nFROM (\n  SELECT listing_id\n  FROM calendar\n  WHERE date >= '2026-08-01' AND date < '2026-09-01'\n  GROUP BY listing_id\n  HAVING COUNT(*) FILTER (WHERE available) = 31\n) t",
+        "verification_sql": "SELECT listings_fully_available AS listings_fully_available_august FROM query_e2e98409"
+      }
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "total_tokens": 335455,
+    "total_cost": 0.1646265,
+    "total_duration_ms": 90038,
+    "total_duration_s": 90.04,
+    "total_tool_calls": 31,
+    "avg_duration_ms": 30013.0,
+    "avg_tool_calls": 10.3
+  },
+  "by_model": [
+    {
+      "model": "anthropic:claude-sonnet-4-6",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "total_tokens": 335455,
+      "total_cost": 0.164627,
+      "total_duration_ms": 90038,
+      "avg_duration_ms": 30013.0,
+      "total_tool_calls": 31,
+      "avg_tool_calls": 10.3
+    }
+  ]
+}

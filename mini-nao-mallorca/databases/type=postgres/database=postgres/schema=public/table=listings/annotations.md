@@ -1,0 +1,13 @@
+# listings: one row per listing, as scraped in June 2026 (data snapshot date)
+- id: listing id. Joins to calendar.listing_id and reviews.listing_id.
+- price: base nightly price of the listing at snapshot time, in EUR (local currency). NULL means no published price. It is NOT a price for a specific date.
+- neighbourhood: municipality of Mallorca. Use it for any question about zone, area, town or neighbourhood.
+- neighbourhood_group: always empty. Never use it.
+- room_type: one of Entire home/apt, Private room, Hotel room.
+- number_of_reviews: canonical total number of reviews of the listing. 0 means never reviewed.
+- number_of_reviews_ltm: canonical number of reviews in the 12 months before the snapshot date.
+- last_review: date of the most recent review.
+- calculated_host_listings_count: canonical number of listings the host has in this dataset. Use it for host size.
+- availability_365: days available in the next 365 days of the calendar.
+- minimum_nights: minimum stay required, in nights.
+- license: free text with up to two registrations (Mallorca regional and Spain national), separated by the literal text "<br />". Values are codes (AT/..., H/..., AG/..., TI/..., ETV/...) or exemptions ("Exempt - ...").

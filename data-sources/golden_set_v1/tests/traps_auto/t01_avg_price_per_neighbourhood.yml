@@ -1,0 +1,8 @@
+# Area: Marketing
+name: t01_avg_price_per_neighbourhood
+prompt: What is the average nightly price in each neighbourhood?
+sql: |
+  SELECT neighbourhood, ROUND(AVG(price), 2) AS avg_price
+  FROM listings
+  WHERE price IS NOT NULL
+  GROUP BY neighbourhood

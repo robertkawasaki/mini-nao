@@ -1,0 +1,4 @@
+# h03_hosts_5_plus.yml
+name: h03_hosts_5_plus
+prompt: How many hosts manage 5 or more listings?
+sql: SELECT COUNT(DISTINCT host_id) AS hosts FROM listings WHERE calculated_host_listings_count >= 5

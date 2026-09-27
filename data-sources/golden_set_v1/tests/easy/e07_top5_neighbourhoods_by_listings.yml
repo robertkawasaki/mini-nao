@@ -1,0 +1,9 @@
+# Area: Supply
+name: e07_top5_neighbourhoods_by_listings
+prompt: Which 5 neighbourhoods have the most listings?
+sql: |
+  SELECT neighbourhood, COUNT(*) AS listings
+  FROM listings
+  GROUP BY neighbourhood
+  ORDER BY listings DESC
+  LIMIT 5

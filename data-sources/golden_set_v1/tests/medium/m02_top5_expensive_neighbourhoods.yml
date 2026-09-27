@@ -1,0 +1,11 @@
+# Area: Marketing
+name: m02_top5_expensive_neighbourhoods
+prompt: Which 5 neighbourhoods have the highest average nightly price, counting only neighbourhoods with at least 50 priced listings?
+sql: |
+  SELECT neighbourhood, ROUND(AVG(price), 2) AS avg_price
+  FROM listings
+  WHERE price IS NOT NULL
+  GROUP BY neighbourhood
+  HAVING COUNT(*) >= 50
+  ORDER BY avg_price DESC
+  LIMIT 5
