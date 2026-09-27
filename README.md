@@ -1,5 +1,7 @@
 # Mini-NAO
 
+Author: Jorge Blanco ([@robertkawasaki](https://github.com/robertkawasaki))
+
 Weekend demo: measure how a text-to-SQL analytics agent improves **only by improving context**, on public Inside Airbnb Mallorca data.
 
 > Accuracy went from X% to Y% in three iterations — by context, not by changing the model.
