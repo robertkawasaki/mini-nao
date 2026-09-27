@@ -5,6 +5,7 @@ Read these files directly with these exact paths. Do not search or list folders:
 - /databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md
 - /databases/type=postgres/database=postgres/schema=public/table=reviews/columns.md
 
+
 ## Business glossary (always applies)
 - Snapshot: the data was collected in June 2026. "Now", "last year" or "last 12 months" are relative to the snapshot, never to today's date.
 - Reviews: use the counters in listings (number_of_reviews, number_of_reviews_ltm). Count rows in reviews only when the question needs review dates.
@@ -13,6 +14,7 @@ Read these files directly with these exact paths. Do not search or list folders:
 - Price: listings.price is the base nightly price in EUR, not a price for a specific date. NULL means no published price.
 - Availability: calendar is future availability. available = false means not bookable (booked or blocked by the host), not a booking.
 - Tourist license: read the value right after "Mallorca - Regional registration number<br />". If it starts with "Exempt", the listing is exempt. Any other value is a registration code, whatever its format. No Mallorca entry means no regional entry. NULL means no data.
+
 
 ## How to answer
 - If you exclude records, give the number and the percentage of the total, counted before the filter.
