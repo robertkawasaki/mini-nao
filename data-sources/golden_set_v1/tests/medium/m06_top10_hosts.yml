@@ -1,9 +1,0 @@
-# Area: Supply
-name: m06_top10_hosts
-prompt: Which 10 hosts have the most listings? Give the host id and the number of listings.
-sql: |
-  SELECT host_id, COUNT(*) AS listings
-  FROM listings
-  GROUP BY host_id
-  ORDER BY listings DESC
-  LIMIT 10

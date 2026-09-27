@@ -1,4 +1,0 @@
-# Area: Supply
-name: e04_listings_per_room_type
-prompt: How many listings are there per room type?
-sql: SELECT room_type, COUNT(*) AS listings FROM listings GROUP BY room_type

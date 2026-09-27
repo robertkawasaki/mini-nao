@@ -1,3 +1,0 @@
-name: h01_reviews_over_50
-prompt: How many listings have received more than 50 reviews in total?
-sql: SELECT COUNT(*) AS listings FROM listings WHERE number_of_reviews > 50

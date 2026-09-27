@@ -1,3 +1,0 @@
-name: h02_pollenca_reviews_last_year
-prompt: How many reviews did listings in Pollença receive in the last year?
-sql: SELECT SUM(number_of_reviews_ltm) AS reviews FROM listings WHERE neighbourhood = 'Pollença'

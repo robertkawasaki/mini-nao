@@ -1,14 +1,38 @@
+# Python / local env
 .venv/
+venv/
 .env
 .env.*
 !.env.example
 **/__pycache__/
-*.pyc
-.nao/
-*.log
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# OS / editors
 .DS_Store
 Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
 
-# Inside Airbnb dumps — download locally, do not publish
-data-sources/*.csv
-data-sources/*.csv.gz
+# Logs / runtime
+*.log
+.nao/
+.cursor/
+
+# nao generated / local runtime (not needed to reproduce the demo)
+mini-nao-mallorca/.meta/
+mini-nao-mallorca/tests/outputs/
+**/tests/outputs/
+
+# Supabase CLI local link state (contains project ref)
+supabase/.temp/
+
+# Local-only: raw dumps, notes, screenshots (not published)
+data-sources/
+docs/

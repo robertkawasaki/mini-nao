@@ -1,6 +1,0 @@
-name: h05_pct_not_bookable_aug
-prompt: What percentage of calendar nights in August 2026 are not bookable?
-sql: |
-  SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE NOT available) / COUNT(*), 2) AS pct_not_bookable
-  FROM calendar
-  WHERE date >= '2026-08-01' AND date < '2026-09-01'

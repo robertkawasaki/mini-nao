@@ -1,4 +1,0 @@
-# Area: Marketing
-name: e06_listings_without_reviews
-prompt: How many listings have never received a review?
-sql: SELECT COUNT(*) AS listings_without_reviews FROM listings WHERE number_of_reviews = 0

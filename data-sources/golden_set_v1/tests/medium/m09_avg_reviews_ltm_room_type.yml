@@ -1,7 +1,0 @@
-# Area: Marketing
-name: m09_avg_reviews_ltm_room_type
-prompt: What is the average number of reviews in the last 12 months per room type?
-sql: |
-  SELECT room_type, ROUND(AVG(number_of_reviews_ltm), 2) AS avg_reviews_last_12_months
-  FROM listings
-  GROUP BY room_type

@@ -1,4 +1,0 @@
-# Area: Supply
-name: e01_total_listings
-prompt: How many listings are there?
-sql: SELECT COUNT(*) AS total_listings FROM listings

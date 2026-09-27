@@ -43,7 +43,8 @@ llm:
 
 test:
   models:
-    - "anthropic:claude-sonnet-4-6"
+    - "anthropic:claude-haiku-4-5"
+    - "anthropic:claude-opus-4-6"
   threads: 2
   comparison:
         rtol: 0.01

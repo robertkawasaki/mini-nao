@@ -1,8 +1,0 @@
-# Area: Operations
-name: m11_long_min_stay_room_type
-prompt: For each room type, how many listings require a minimum stay of 7 nights or more?
-sql: |
-  SELECT room_type, COUNT(*) AS listings
-  FROM listings
-  WHERE minimum_nights >= 7
-  GROUP BY room_type

@@ -1,7 +1,0 @@
-# Area: Operations
-name: m07_pct_unavailable_july
-prompt: In the calendar, what percentage of July nights are marked as unavailable across all listings?
-sql: |
-  SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE NOT available) / COUNT(*), 2) AS pct_nights_unavailable
-  FROM calendar
-  WHERE EXTRACT(MONTH FROM date) = 7

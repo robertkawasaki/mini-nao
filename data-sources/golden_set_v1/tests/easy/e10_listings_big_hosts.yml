@@ -1,4 +1,0 @@
-# Area: Supply
-name: e10_listings_big_hosts
-prompt: How many listings belong to hosts that have more than 10 listings?
-sql: SELECT COUNT(*) AS listings FROM listings WHERE calculated_host_listings_count > 10

@@ -1,4 +1,0 @@
-# Area: Finance
-name: e05_avg_price_priced
-prompt: What is the average nightly price of the listings that have a price?
-sql: SELECT ROUND(AVG(price), 2) AS avg_price FROM listings WHERE price IS NOT NULL
