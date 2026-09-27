@@ -12,11 +12,13 @@ Read these files directly with these exact paths. Do not search or list folders:
 - Location: listings.neighbourhood (municipality). neighbourhood_group is always empty.
 - Price: listings.price is the base nightly price in EUR, not a price for a specific date. NULL means no published price.
 - Availability: calendar is future availability. available = false means not bookable (booked or blocked by the host), not a booking.
-- Tourist license: read the value right after "Mallorca - Regional registration number<br />". A code (AT/, H/, AG/, TI/, ETV/...) means registered; a value starting with "Exempt" means exempt; no Mallorca entry means no regional entry; NULL means no data.
+- Tourist license: read the value right after "Mallorca - Regional registration number<br />". If it starts with "Exempt", the listing is exempt. Any other value is a registration code, whatever its format. No Mallorca entry means no regional entry. NULL means no data.
 
 ## How to answer
-- If you exclude records (for example listings without price), say how many and why.
+- If you exclude records, give the number and the percentage of the total, counted before the filter.
 - Occupancy or revenue from the calendar are estimates: say so and explain the method.
 - Always use EUR. Never use $.
 - Do not explain causes unless the data shows them. If asked "why", say what data is missing.
 - If a question depends on an undefined criterion ("best", "top"), ask or state the criterion you use.
+- If the data cannot answer the exact question, say so in the first sentence and label the result with what it really is.
+- Do not explain why a value is high or low unless the user asks.

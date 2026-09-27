@@ -1,0 +1,6189 @@
+{
+  "timestamp": "2026-09-27T14:28:15.393992",
+  "results": [
+    {
+      "name": "m01_avg_price_room_type",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 34146,
+      "cost": 0.02410755,
+      "duration_ms": 13682,
+      "tool_call_count": 3,
+      "error": null,
+      "details": {
+        "response_text": "Here are the results across <citation-number id=\"query_6773bd1c\" column=\"listing_count\">11140</citation-number> listings with a published price (shared rooms are absent from the data):\n\n| Room Type | Listings | Avg. Nightly Price |\n|---|---|---|\n| Entire home/apt | 10,368 | \u20ac651.63 |\n| Hotel room | 30 | \u20ac265.23 |\n| Private room | 742 | \u20ac224.30 |\n\nA few things to note:\n- **Entire home/apt** dominates both in volume and price, averaging nearly **3\u00d7 more** than private or hotel rooms.\n- **Hotel rooms** (only 30 listings) sit slightly above private rooms at \u20ac265.\n- The hotel room average should be interpreted cautiously given the very small sample size.",
+        "actual_data": [
+          {
+            "room_type": "Entire home/apt",
+            "avg_price": 651.63
+          },
+          {
+            "room_type": "Hotel room",
+            "avg_price": 265.23
+          },
+          {
+            "room_type": "Private room",
+            "avg_price": 224.3
+          }
+        ],
+        "expected_data": [
+          {
+            "room_type": "Entire home/apt",
+            "avg_price": 651.63
+          },
+          {
+            "room_type": "Private room",
+            "avg_price": 224.3
+          },
+          {
+            "room_type": "Hotel room",
+            "avg_price": 265.23
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01DFKto2aPd8XsmyrdHv8bkC",
+            "args": {
+              "sql_query": "\nSELECT \n    room_type,\n    COUNT(*) AS listing_count,\n    ROUND(AVG(price), 2) AS avg_nightly_price\nFROM listings\nWHERE price IS NOT NULL\nGROUP BY room_type\nORDER BY avg_nightly_price DESC\n",
+              "name": "Average nightly price per room type"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "room_type": "Entire home/apt",
+                  "listing_count": 10368,
+                  "avg_nightly_price": 651.63
+                },
+                {
+                  "room_type": "Hotel room",
+                  "listing_count": 30,
+                  "avg_nightly_price": 265.23
+                },
+                {
+                  "room_type": "Private room",
+                  "listing_count": 742,
+                  "avg_nightly_price": 224.3
+                }
+              ],
+              "row_count": 3,
+              "columns": [
+                "room_type",
+                "listing_count",
+                "avg_nightly_price"
+              ],
+              "dialect": "postgres",
+              "id": "query_6773bd1c"
+            }
+          },
+          {
+            "toolName": "display_chart",
+            "toolCallId": "toolu_01Eb1gZpeaTUVzEuqbPaXmj7",
+            "args": {
+              "query_id": "query_6773bd1c",
+              "chart_type": "bar",
+              "x_axis_key": "room_type",
+              "x_axis_type": "category",
+              "series": [
+                {
+                  "data_key": "avg_nightly_price",
+                  "label": "Avg. Nightly Price",
+                  "value_format": {
+                    "d3_format": ",.2f",
+                    "prefix": "\u20ac"
+                  }
+                }
+              ],
+              "show_data_labels": true,
+              "title": "Average Nightly Price by Room Type (EUR)"
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01Xc4jWuDtxHNANR8sYdMxxe",
+            "args": {
+              "suggestions": [
+                "How does the average price vary by neighbourhood for entire homes?",
+                "What is the price distribution (min, median, max) per room type?",
+                "How does availability differ across room types?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT room_type, ROUND(AVG(price), 2) AS avg_price\nFROM listings\nWHERE price IS NOT NULL\nGROUP BY room_type\n",
+        "verification_sql": "SELECT room_type, avg_nightly_price AS avg_price FROM query_6773bd1c ORDER BY avg_nightly_price DESC"
+      }
+    },
+    {
+      "name": "m02_top5_expensive_neighbourhoods",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 34636,
+      "cost": 0.0266268,
+      "duration_ms": 15659,
+      "tool_call_count": 3,
+      "error": null,
+      "details": {
+        "response_text": "Here are the 5 neighbourhoods with the highest average nightly price, each with at least 50 priced listings:\n\n| Rank | Neighbourhood | Priced Listings | Avg Nightly Price |\n|------|--------------|----------------|-------------------|\n| 1 | **Andratx** | 165 | \u20ac1,117.67 |\n| 2 | **Algaida** | 66 | \u20ac1,007.58 |\n| 3 | **Marratx\u00ed** | 69 | \u20ac960.80 |\n| 4 | **Alar\u00f3** | 62 | \u20ac842.44 |\n| 5 | **Dey\u00e1** | 67 | \u20ac809.48 |\n\n**Andratx** leads by a clear margin at <citation-number id=\"query_b21d1dee\" column=\"avg_nightly_price\">1117.67</citation-number> EUR/night on average, and is also the largest of the five with <citation-number id=\"query_b21d1dee\" column=\"priced_listings\">165</citation-number> priced listings. All five are well above \u20ac800/night, suggesting these are predominantly premium/rural areas of Mallorca.",
+        "actual_data": [
+          {
+            "neighbourhood": "Andratx",
+            "avg_price": 1117.67
+          },
+          {
+            "neighbourhood": "Algaida",
+            "avg_price": 1007.58
+          },
+          {
+            "neighbourhood": "Marratx\u00ed",
+            "avg_price": 960.8
+          },
+          {
+            "neighbourhood": "Alar\u00f3",
+            "avg_price": 842.44
+          },
+          {
+            "neighbourhood": "Dey\u00e1",
+            "avg_price": 809.48
+          }
+        ],
+        "expected_data": [
+          {
+            "neighbourhood": "Andratx",
+            "avg_price": 1117.67
+          },
+          {
+            "neighbourhood": "Algaida",
+            "avg_price": 1007.58
+          },
+          {
+            "neighbourhood": "Marratx\u00ed",
+            "avg_price": 960.8
+          },
+          {
+            "neighbourhood": "Alar\u00f3",
+            "avg_price": 842.44
+          },
+          {
+            "neighbourhood": "Dey\u00e1",
+            "avg_price": 809.48
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01RMTAdokRZ67XGM7btZfdUX",
+            "args": {
+              "sql_query": "\nSELECT\n    neighbourhood,\n    COUNT(*) AS priced_listings,\n    ROUND(AVG(price), 2) AS avg_nightly_price\nFROM listings\nWHERE price IS NOT NULL\nGROUP BY neighbourhood\nHAVING COUNT(*) >= 50\nORDER BY avg_nightly_price DESC\nLIMIT 5;\n",
+              "name": "Top 5 Neighbourhoods by Avg Nightly Price"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "neighbourhood": "Andratx",
+                  "priced_listings": 165,
+                  "avg_nightly_price": 1117.67
+                },
+                {
+                  "neighbourhood": "Algaida",
+                  "priced_listings": 66,
+                  "avg_nightly_price": 1007.58
+                },
+                {
+                  "neighbourhood": "Marratx\u00ed",
+                  "priced_listings": 69,
+                  "avg_nightly_price": 960.8
+                },
+                {
+                  "neighbourhood": "Alar\u00f3",
+                  "priced_listings": 62,
+                  "avg_nightly_price": 842.44
+                },
+                {
+                  "neighbourhood": "Dey\u00e1",
+                  "priced_listings": 67,
+                  "avg_nightly_price": 809.48
+                }
+              ],
+              "row_count": 5,
+              "columns": [
+                "neighbourhood",
+                "priced_listings",
+                "avg_nightly_price"
+              ],
+              "dialect": "postgres",
+              "id": "query_b21d1dee",
+              "applied_limit": 5
+            }
+          },
+          {
+            "toolName": "display_chart",
+            "toolCallId": "toolu_01GhCLYyg5gnpaN4Bh1E1Yii",
+            "args": {
+              "query_id": "query_b21d1dee",
+              "chart_type": "horizontal_bar",
+              "x_axis_key": "neighbourhood",
+              "x_axis_type": "category",
+              "series": [
+                {
+                  "data_key": "avg_nightly_price",
+                  "label": "Avg Nightly Price (EUR)",
+                  "value_format": {
+                    "d3_format": ",.2f",
+                    "prefix": "\u20ac"
+                  }
+                }
+              ],
+              "title": "Top 5 Neighbourhoods by Average Nightly Price (min. 50 priced listings)"
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_019RJxQiduXa1cWJfChdym87",
+            "args": {
+              "suggestions": [
+                "How do these neighbourhoods compare in terms of availability and estimated occupancy?",
+                "What share of listings in these top neighbourhoods have a tourist license?",
+                "Show the full ranking of all neighbourhoods with at least 50 priced listings."
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT neighbourhood, ROUND(AVG(price), 2) AS avg_price\nFROM listings\nWHERE price IS NOT NULL\nGROUP BY neighbourhood\nHAVING COUNT(*) >= 50\nORDER BY avg_price DESC\nLIMIT 5\n",
+        "verification_sql": "SELECT neighbourhood, avg_nightly_price AS avg_price FROM query_b21d1dee ORDER BY avg_nightly_price DESC LIMIT 5"
+      }
+    },
+    {
+      "name": "m03_reviews_per_year",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 34103,
+      "cost": 0.023493,
+      "duration_ms": 13356,
+      "tool_call_count": 3,
+      "error": null,
+      "details": {
+        "response_text": "Here's the review count by year:\n\n| Year | Reviews |\n|------|---------|\n| 2019 | 24,197 |\n| 2020 | 9,524 |\n| 2021 | 31,463 |\n| 2022 | 49,841 |\n| 2023 | 58,032 |\n| 2024 | 72,938 |\n| 2025 | 84,867 |\n\nA few observations:\n- **2020** saw a sharp drop \u2014 consistent with COVID-19 travel restrictions.\n- **2021** rebounded strongly, and growth has been consistent every year since.\n- **2025** is the highest year on record with <citation-number id=\"query_46e3de48\" column=\"review_count\">84,867</citation-number> reviews, though the snapshot was taken in June 2026, so 2025 is a full year.",
+        "actual_data": [
+          {
+            "year": 2019,
+            "reviews": 24197
+          },
+          {
+            "year": 2020,
+            "reviews": 9524
+          },
+          {
+            "year": 2021,
+            "reviews": 31463
+          },
+          {
+            "year": 2022,
+            "reviews": 49841
+          },
+          {
+            "year": 2023,
+            "reviews": 58032
+          },
+          {
+            "year": 2024,
+            "reviews": 72938
+          },
+          {
+            "year": 2025,
+            "reviews": 84867
+          }
+        ],
+        "expected_data": [
+          {
+            "year": 2024,
+            "reviews": 72938
+          },
+          {
+            "year": 2021,
+            "reviews": 31463
+          },
+          {
+            "year": 2023,
+            "reviews": 58032
+          },
+          {
+            "year": 2022,
+            "reviews": 49841
+          },
+          {
+            "year": 2025,
+            "reviews": 84867
+          },
+          {
+            "year": 2019,
+            "reviews": 24197
+          },
+          {
+            "year": 2020,
+            "reviews": 9524
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_018pAiAZ3Jm6U6XLnhntYh2H",
+            "args": {
+              "sql_query": "\nSELECT\n    EXTRACT(YEAR FROM date)::int AS year,\n    COUNT(*) AS review_count\nFROM reviews\nWHERE EXTRACT(YEAR FROM date) BETWEEN 2019 AND 2025\nGROUP BY year\nORDER BY year\n",
+              "name": "Reviews per year (2019\u20132025)"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "year": 2019,
+                  "review_count": 24197
+                },
+                {
+                  "year": 2020,
+                  "review_count": 9524
+                },
+                {
+                  "year": 2021,
+                  "review_count": 31463
+                },
+                {
+                  "year": 2022,
+                  "review_count": 49841
+                },
+                {
+                  "year": 2023,
+                  "review_count": 58032
+                },
+                {
+                  "year": 2024,
+                  "review_count": 72938
+                },
+                {
+                  "year": 2025,
+                  "review_count": 84867
+                }
+              ],
+              "row_count": 7,
+              "columns": [
+                "year",
+                "review_count"
+              ],
+              "dialect": "postgres",
+              "id": "query_46e3de48"
+            }
+          },
+          {
+            "toolName": "display_chart",
+            "toolCallId": "toolu_01EbPDHHcuNM5q345Siw447H",
+            "args": {
+              "query_id": "query_46e3de48",
+              "chart_type": "bar",
+              "x_axis_key": "year",
+              "x_axis_type": "category",
+              "series": [
+                {
+                  "data_key": "review_count",
+                  "label": "Reviews"
+                }
+              ],
+              "title": "Reviews Written per Year (2019\u20132025)"
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01Pc7DihDwSL93MW5LWbjUpk",
+            "args": {
+              "suggestions": [
+                "How do reviews trend by month within a specific year?",
+                "Which neighbourhoods have the most reviews in 2024\u20132025?",
+                "What is the average rating per year based on review scores?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT EXTRACT(YEAR FROM date)::int AS year, COUNT(*) AS reviews\nFROM reviews\nWHERE date >= '2019-01-01' AND date < '2026-01-01'\nGROUP BY 1\n",
+        "verification_sql": "SELECT year, review_count AS reviews FROM query_46e3de48 ORDER BY year"
+      }
+    },
+    {
+      "name": "m04_peak_review_month_2025",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 22257,
+      "cost": 0.01266825,
+      "duration_ms": 5551,
+      "tool_call_count": 1,
+      "error": null,
+      "details": {
+        "response_text": "Month **6 (June)** had the most reviews in 2025, with <citation-number id=\"query_c842d997\" column=\"review_count\">11,452</citation-number> reviews.",
+        "actual_data": [
+          {
+            "month": 6,
+            "reviews": 11452
+          }
+        ],
+        "expected_data": [
+          {
+            "month": 6,
+            "reviews": 11452
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_018dWjUMRwpJXs52xyABUzis",
+            "args": {
+              "sql_query": "\nSELECT EXTRACT(MONTH FROM date) AS month, COUNT(*) AS review_count\nFROM reviews\nWHERE date >= '2025-01-01' AND date < '2026-01-01'\nGROUP BY month\nORDER BY review_count DESC\nLIMIT 1;\n",
+              "name": "Most reviewed month in 2025"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "month": 6,
+                  "review_count": 11452
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "month",
+                "review_count"
+              ],
+              "dialect": "postgres",
+              "id": "query_c842d997",
+              "applied_limit": 1
+            }
+          }
+        ],
+        "reference_sql": "SELECT EXTRACT(MONTH FROM date)::int AS month, COUNT(*) AS reviews\nFROM reviews\nWHERE date >= '2025-01-01' AND date < '2026-01-01'\nGROUP BY 1\nORDER BY reviews DESC\nLIMIT 1",
+        "verification_sql": "SELECT month, review_count AS reviews FROM query_c842d997 ORDER BY review_count DESC LIMIT 1"
+      }
+    },
+    {
+      "name": "m05_pct_listings_multi_hosts",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 22406,
+      "cost": 0.0155895,
+      "duration_ms": 9043,
+      "tool_call_count": 2,
+      "error": null,
+      "details": {
+        "response_text": "<citation-number id=\"query_87edfc96\" column=\"pct_multi\">80.87</citation-number>% of all listings belong to hosts with 2 or more listings \u2014 that's <citation-number id=\"query_87edfc96\" column=\"multi_listings\">12,051</citation-number> out of <citation-number id=\"query_87edfc96\" column=\"total_listings\">14,901</citation-number> total listings.",
+        "actual_data": [
+          {
+            "pct_listings_multi_listing_hosts": 80.87
+          }
+        ],
+        "expected_data": [
+          {
+            "pct_listings_multi_listing_hosts": 80.87
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_012Fs6mmk6EhdbRPbd8C1kXW",
+            "args": {
+              "sql_query": "\nSELECT\n    COUNT(*) AS total_listings,\n    SUM(CASE WHEN calculated_host_listings_count >= 2 THEN 1 ELSE 0 END) AS multi_listings,\n    ROUND(100.0 * SUM(CASE WHEN calculated_host_listings_count >= 2 THEN 1 ELSE 0 END) / COUNT(*), 2) AS pct_multi\nFROM listings;\n",
+              "name": "Multi-listing hosts share"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "total_listings": 14901,
+                  "multi_listings": 12051,
+                  "pct_multi": 80.87
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "total_listings",
+                "multi_listings",
+                "pct_multi"
+              ],
+              "dialect": "postgres",
+              "id": "query_87edfc96"
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01UJPfrfPA99YRFDsF1edcpu",
+            "args": {
+              "suggestions": [
+                "How are listings distributed by host size (1, 2\u20135, 6\u201310, 10+ listings)?",
+                "Which neighbourhoods have the highest concentration of multi-listing hosts?",
+                "Do multi-listing hosts charge higher prices on average than single-listing hosts?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE calculated_host_listings_count >= 2) / COUNT(*), 2) AS pct_listings_multi_listing_hosts\nFROM listings\n",
+        "verification_sql": "SELECT pct_multi AS pct_listings_multi_listing_hosts FROM query_87edfc96"
+      }
+    },
+    {
+      "name": "m06_top10_hosts",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 34790,
+      "cost": 0.0287535,
+      "duration_ms": 16092,
+      "tool_call_count": 3,
+      "error": null,
+      "details": {
+        "response_text": "Here are the top 10 hosts by number of listings:\n\n| Rank | Host ID | Listings |\n|------|-------------|----------|\n| 1 | 80839530 | <citation-number id=\"query_bb2d32d7\" column=\"number_of_listings\">791</citation-number> |\n| 2 | 65697804 | <citation-number id=\"query_bb2d32d7\" column=\"number_of_listings\">218</citation-number> |\n| 3 | 122491844 | <citation-number id=\"query_bb2d32d7\" column=\"number_of_listings\">193</citation-number> |\n| 4 | 205496849 | <citation-number id=\"query_bb2d32d7\" column=\"number_of_listings\">174</citation-number> |\n| 5 | 97222654 | <citation-number id=\"query_bb2d32d7\" column=\"number_of_listings\">171</citation-number> |\n| 6 | 66176030 | <citation-number id=\"query_bb2d32d7\" column=\"number_of_listings\">159</citation-number> |\n| 7 | 80636743 | <citation-number id=\"query_bb2d32d7\" column=\"number_of_listings\">133</citation-number> |\n| 8 | 76875955 | <citation-number id=\"query_bb2d32d7\" column=\"number_of_listings\">130</citation-number> |\n| 9 | 156144596 | <citation-number id=\"query_bb2d32d7\" column=\"number_of_listings\">125</citation-number> |\n| 10 | 733369076 | <citation-number id=\"query_bb2d32d7\" column=\"number_of_listings\">123</citation-number> |\n\nHost **80839530** stands out significantly with 791 listings \u2014 more than 3.6\u00d7 the second-largest host (218). The remaining 9 hosts are more closely clustered between 123 and 218 listings.",
+        "actual_data": [
+          {
+            "host_id": 80839530,
+            "listings": 791
+          },
+          {
+            "host_id": 65697804,
+            "listings": 218
+          },
+          {
+            "host_id": 122491844,
+            "listings": 193
+          },
+          {
+            "host_id": 205496849,
+            "listings": 174
+          },
+          {
+            "host_id": 97222654,
+            "listings": 171
+          },
+          {
+            "host_id": 66176030,
+            "listings": 159
+          },
+          {
+            "host_id": 80636743,
+            "listings": 133
+          },
+          {
+            "host_id": 76875955,
+            "listings": 130
+          },
+          {
+            "host_id": 156144596,
+            "listings": 125
+          },
+          {
+            "host_id": 733369076,
+            "listings": 123
+          }
+        ],
+        "expected_data": [
+          {
+            "host_id": 80839530,
+            "listings": 791
+          },
+          {
+            "host_id": 65697804,
+            "listings": 218
+          },
+          {
+            "host_id": 122491844,
+            "listings": 193
+          },
+          {
+            "host_id": 205496849,
+            "listings": 174
+          },
+          {
+            "host_id": 97222654,
+            "listings": 171
+          },
+          {
+            "host_id": 66176030,
+            "listings": 159
+          },
+          {
+            "host_id": 80636743,
+            "listings": 133
+          },
+          {
+            "host_id": 76875955,
+            "listings": 130
+          },
+          {
+            "host_id": 156144596,
+            "listings": 125
+          },
+          {
+            "host_id": 733369076,
+            "listings": 123
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_016zeWGJQCs8bxpgypCTMLSa",
+            "args": {
+              "sql_query": "\nSELECT host_id, COUNT(*) AS number_of_listings\nFROM listings\nGROUP BY host_id\nORDER BY number_of_listings DESC\nLIMIT 10\n",
+              "name": "Top 10 hosts by number of listings"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "host_id": 80839530,
+                  "number_of_listings": 791
+                },
+                {
+                  "host_id": 65697804,
+                  "number_of_listings": 218
+                },
+                {
+                  "host_id": 122491844,
+                  "number_of_listings": 193
+                },
+                {
+                  "host_id": 205496849,
+                  "number_of_listings": 174
+                },
+                {
+                  "host_id": 97222654,
+                  "number_of_listings": 171
+                },
+                {
+                  "host_id": 66176030,
+                  "number_of_listings": 159
+                },
+                {
+                  "host_id": 80636743,
+                  "number_of_listings": 133
+                },
+                {
+                  "host_id": 76875955,
+                  "number_of_listings": 130
+                },
+                {
+                  "host_id": 156144596,
+                  "number_of_listings": 125
+                },
+                {
+                  "host_id": 733369076,
+                  "number_of_listings": 123
+                }
+              ],
+              "row_count": 10,
+              "columns": [
+                "host_id",
+                "number_of_listings"
+              ],
+              "dialect": "postgres",
+              "id": "query_bb2d32d7",
+              "applied_limit": 10
+            }
+          },
+          {
+            "toolName": "display_chart",
+            "toolCallId": "toolu_011vmAuE4ffKPb8ireEb55jd",
+            "args": {
+              "query_id": "query_bb2d32d7",
+              "chart_type": "horizontal_bar",
+              "x_axis_key": "host_id",
+              "x_axis_type": "category",
+              "series": [
+                {
+                  "data_key": "number_of_listings",
+                  "label": "Listings"
+                }
+              ],
+              "show_data_labels": true,
+              "title": "Top 10 Hosts by Number of Listings"
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01HW7sBAtVT1LveGJRS1TTEJ",
+            "args": {
+              "suggestions": [
+                "What are the host names behind these IDs?",
+                "What is the average nightly price for the top host's listings?",
+                "How are the top host's listings distributed across neighbourhoods?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT host_id, COUNT(*) AS listings\nFROM listings\nGROUP BY host_id\nORDER BY listings DESC\nLIMIT 10\n",
+        "verification_sql": "SELECT host_id, number_of_listings AS listings FROM query_bb2d32d7 ORDER BY listings DESC"
+      }
+    },
+    {
+      "name": "m07_pct_unavailable_july",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match (approximate)",
+      "tokens": 22472,
+      "cost": 0.01628325,
+      "duration_ms": 11277,
+      "tool_call_count": 2,
+      "error": null,
+      "details": {
+        "response_text": "Across all listings, **<citation-number id=\"query_5b9c0b9a\" column=\"pct_unavailable\">70.67</citation-number>%** of July 2026 nights are marked as unavailable in the calendar.\n\n| Metric | Value |\n|---|---|\n| Total night-slots | 461,064 |\n| Unavailable | 325,838 |\n| Available | 135,226 |\n| **% Unavailable** | **70.67%** |\n\nKeep in mind that \"unavailable\" means the night is either booked or blocked by the host \u2014 the calendar doesn't distinguish between the two.",
+        "actual_data": [
+          {
+            "pct_nights_unavailable": 70.67
+          }
+        ],
+        "expected_data": [
+          {
+            "pct_nights_unavailable": 70.69
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_016uiVfFt5KFBxudTVGnyrAW",
+            "args": {
+              "sql_query": "\nSELECT\n    COUNT(*) AS total_nights,\n    SUM(CASE WHEN available = false THEN 1 ELSE 0 END) AS unavailable_nights,\n    ROUND(100.0 * SUM(CASE WHEN available = false THEN 1 ELSE 0 END) / COUNT(*), 2) AS pct_unavailable\nFROM calendar\nWHERE date >= '2026-07-01' AND date < '2026-08-01'\n",
+              "name": "July unavailability rate"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "total_nights": 461064,
+                  "unavailable_nights": 325838,
+                  "pct_unavailable": 70.67
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "total_nights",
+                "unavailable_nights",
+                "pct_unavailable"
+              ],
+              "dialect": "postgres",
+              "id": "query_5b9c0b9a"
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01H9hVpC3uh8GAFzG5zJ2Y4E",
+            "args": {
+              "suggestions": [
+                "How does July's unavailability rate compare to other months?",
+                "Which neighbourhoods have the highest unavailability rate in July?",
+                "What is the estimated occupancy revenue for July based on calendar data?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE NOT available) / COUNT(*), 2) AS pct_nights_unavailable\nFROM calendar\nWHERE EXTRACT(MONTH FROM date) = 7\n",
+        "verification_sql": "SELECT pct_unavailable AS pct_nights_unavailable FROM query_5b9c0b9a"
+      }
+    },
+    {
+      "name": "m08_fully_blocked_next_30_days",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 44999,
+      "cost": 0.02478585,
+      "duration_ms": 27019,
+      "tool_call_count": 3,
+      "error": null,
+      "details": {
+        "response_text": "**<citation-number id=\"query_50e22b12\" column=\"listings_unavailable_all_30_days\">2,328</citation-number> listings** are marked as unavailable (`available = false`) on every single one of the first 30 calendar days (June 23 \u2013 July 22, 2026).\n\nNote: `available = false` means the date is either booked or blocked by the host \u2014 it does not distinguish between the two.",
+        "actual_data": [
+          {
+            "listings_fully_unavailable": 2328
+          }
+        ],
+        "expected_data": [
+          {
+            "listings_fully_unavailable": 2328
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "read",
+            "toolCallId": "toolu_014Wys3cFLAy4KkKkCgCbsNb",
+            "args": {
+              "file_path": "/databases/type=postgres/database=postgres/schema=public/table=calendar/columns.md"
+            }
+          },
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01MfT9H2zENEC9UdYqsZ51fJ",
+            "args": {
+              "sql_query": "\nSELECT MIN(date) AS first_date, MAX(date) AS last_date\nFROM calendar\n",
+              "name": "Calendar date range"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "first_date": "2026-06-23",
+                  "last_date": "2027-07-01"
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "first_date",
+                "last_date"
+              ],
+              "dialect": "postgres",
+              "id": "query_8367e0a5"
+            }
+          },
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_019bsWdagRRsazYyc5f8RxeM",
+            "args": {
+              "sql_query": "\nWITH first_30_days AS (\n    SELECT DISTINCT date\n    FROM calendar\n    ORDER BY date\n    LIMIT 30\n),\nunavailable_all_30 AS (\n    SELECT listing_id, COUNT(DISTINCT date) AS days_unavailable\n    FROM calendar\n    WHERE date IN (SELECT date FROM first_30_days)\n      AND available = false\n    GROUP BY listing_id\n    HAVING COUNT(DISTINCT date) = 30\n)\nSELECT COUNT(*) AS listings_unavailable_all_30_days\nFROM unavailable_all_30\n",
+              "name": "Listings unavailable all first 30 days"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "listings_unavailable_all_30_days": 2328
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "listings_unavailable_all_30_days"
+              ],
+              "dialect": "postgres",
+              "id": "query_50e22b12"
+            }
+          }
+        ],
+        "reference_sql": "WITH start AS (SELECT MIN(date) AS d FROM calendar)\nSELECT COUNT(*) AS listings_fully_unavailable\nFROM (\n  SELECT c.listing_id\n  FROM calendar c, start s\n  WHERE c.date >= s.d AND c.date < s.d + 30\n  GROUP BY c.listing_id\n  HAVING COUNT(*) FILTER (WHERE NOT c.available) = 30\n) t",
+        "verification_sql": "SELECT listings_unavailable_all_30_days AS listings_fully_unavailable FROM query_50e22b12"
+      }
+    },
+    {
+      "name": "m09_avg_reviews_ltm_room_type",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 34180,
+      "cost": 0.024753449999999996,
+      "duration_ms": 24898,
+      "tool_call_count": 3,
+      "error": null,
+      "details": {
+        "response_text": "Here are the results across the 3 room types (14,901 listings total):\n\n| Room Type | Listings | Avg Reviews (LTM) |\n|---|---|---|\n| Private room | 808 | 15.23 |\n| Hotel room | 40 | 11.10 |\n| Entire home/apt | 14,053 | 5.47 |\n\n**Private rooms** lead by a wide margin with <citation-number id=\"query_1c0fab98\" column=\"avg_reviews_ltm\">15.23</citation-number> reviews on average in the last 12 months \u2014 nearly 3\u00d7 more than **Entire home/apt** listings (<citation-number id=\"query_1c0fab98\" column=\"avg_reviews_ltm\">5.47</citation-number>). Note that \"Shared room\" is absent from the data, meaning no listings are categorized as such. The dominance of entire homes (14,053 listings) reflects Mallorca's typical short-term rental market, but private rooms appear to generate more guest activity per listing.",
+        "actual_data": [
+          {
+            "room_type": "Private room",
+            "avg_reviews_last_12_months": 15.23
+          },
+          {
+            "room_type": "Hotel room",
+            "avg_reviews_last_12_months": 11.1
+          },
+          {
+            "room_type": "Entire home/apt",
+            "avg_reviews_last_12_months": 5.47
+          }
+        ],
+        "expected_data": [
+          {
+            "room_type": "Entire home/apt",
+            "avg_reviews_last_12_months": 5.47
+          },
+          {
+            "room_type": "Private room",
+            "avg_reviews_last_12_months": 15.23
+          },
+          {
+            "room_type": "Hotel room",
+            "avg_reviews_last_12_months": 11.1
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01J4eHUkoaZiDNY9EDBmrM9s",
+            "args": {
+              "sql_query": "\nSELECT \n    room_type,\n    COUNT(*) AS listing_count,\n    ROUND(AVG(number_of_reviews_ltm), 2) AS avg_reviews_ltm\nFROM listings\nGROUP BY room_type\nORDER BY avg_reviews_ltm DESC\n",
+              "name": "Avg Reviews LTM by Room Type"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "room_type": "Private room",
+                  "listing_count": 808,
+                  "avg_reviews_ltm": 15.23
+                },
+                {
+                  "room_type": "Hotel room",
+                  "listing_count": 40,
+                  "avg_reviews_ltm": 11.1
+                },
+                {
+                  "room_type": "Entire home/apt",
+                  "listing_count": 14053,
+                  "avg_reviews_ltm": 5.47
+                }
+              ],
+              "row_count": 3,
+              "columns": [
+                "room_type",
+                "listing_count",
+                "avg_reviews_ltm"
+              ],
+              "dialect": "postgres",
+              "id": "query_1c0fab98"
+            }
+          },
+          {
+            "toolName": "display_chart",
+            "toolCallId": "toolu_014vswAE3PJCU29nCLtAQqaV",
+            "args": {
+              "query_id": "query_1c0fab98",
+              "chart_type": "horizontal_bar",
+              "x_axis_key": "room_type",
+              "x_axis_type": "category",
+              "series": [
+                {
+                  "data_key": "avg_reviews_ltm",
+                  "label": "Avg Reviews (LTM)"
+                }
+              ],
+              "show_data_labels": true,
+              "title": "Average Reviews (Last 12 Months) by Room Type"
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01FgLHkzHAwGLkW9tnGbqoDh",
+            "args": {
+              "suggestions": [
+                "How does the average review score vary by room type?",
+                "Which neighbourhoods have the highest average reviews in the last 12 months?",
+                "Is there a correlation between price and number of reviews for entire home listings?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT room_type, ROUND(AVG(number_of_reviews_ltm), 2) AS avg_reviews_last_12_months\nFROM listings\nGROUP BY room_type\n",
+        "verification_sql": "SELECT room_type, avg_reviews_ltm AS avg_reviews_last_12_months FROM query_1c0fab98 ORDER BY avg_reviews_ltm DESC"
+      }
+    },
+    {
+      "name": "m10_dormant_listings",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 22222,
+      "cost": 0.013692,
+      "duration_ms": 7735,
+      "tool_call_count": 2,
+      "error": null,
+      "details": {
+        "response_text": "<citation-number id=\"query_73d71821\" column=\"listing_count\">632</citation-number> listings have at least one review on record but their last review predates January 1, 2024 \u2014 meaning they've been inactive (by review activity) for at least 2.5 years relative to the June 2026 snapshot.",
+        "actual_data": [
+          {
+            "dormant_listings": 632
+          }
+        ],
+        "expected_data": [
+          {
+            "dormant_listings": 632
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01P2zJRL4zQAvZsJew93XuFJ",
+            "args": {
+              "sql_query": "\nSELECT COUNT(*) AS listing_count\nFROM listings\nWHERE number_of_reviews > 0\n  AND (last_review IS NULL OR last_review < '2024-01-01')\n",
+              "name": "Listings with reviews but none since 2024"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "listing_count": 632
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "listing_count"
+              ],
+              "dialect": "postgres",
+              "id": "query_73d71821"
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01RU2RiQvUscidQ8sQ3K8srX",
+            "args": {
+              "suggestions": [
+                "What share of total listings does this represent?",
+                "How are these inactive listings distributed across neighbourhoods?",
+                "Do these listings still have future availability in the calendar?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT COUNT(*) AS dormant_listings\nFROM listings\nWHERE number_of_reviews > 0 AND last_review < '2024-01-01'\n",
+        "verification_sql": "SELECT listing_count AS dormant_listings FROM query_73d71821"
+      }
+    },
+    {
+      "name": "m11_long_min_stay_room_type",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 33929,
+      "cost": 0.022723049999999998,
+      "duration_ms": 12755,
+      "tool_call_count": 3,
+      "error": null,
+      "details": {
+        "response_text": "Here's the breakdown of listings with a minimum stay of 7 nights or more:\n\n| Room Type | Listings |\n|---|---|\n| Entire home/apt | 1,404 |\n| Private room | 85 |\n| Hotel room | 1 |\n\n**Entire home/apt** dominates heavily, accounting for <citation-number id=\"query_09481eb7\" column=\"listings_count\">1404</citation-number> out of 1,490 total listings with this constraint. This is typical for Mallorca, where weekly rentals (aligned with Saturday-to-Saturday tourist packages) are a common practice for holiday homes. Shared rooms have no listings with a 7+ night minimum.",
+        "actual_data": [
+          {
+            "room_type": "Entire home/apt",
+            "listings": 1404
+          },
+          {
+            "room_type": "Private room",
+            "listings": 85
+          },
+          {
+            "room_type": "Hotel room",
+            "listings": 1
+          }
+        ],
+        "expected_data": [
+          {
+            "room_type": "Entire home/apt",
+            "listings": 1404
+          },
+          {
+            "room_type": "Private room",
+            "listings": 85
+          },
+          {
+            "room_type": "Hotel room",
+            "listings": 1
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_012hAD5erXg95gn4XBqJLqVq",
+            "args": {
+              "sql_query": "\nSELECT\n    room_type,\n    COUNT(*) AS listings_count\nFROM listings\nWHERE minimum_nights >= 7\nGROUP BY room_type\nORDER BY listings_count DESC\n",
+              "name": "Listings with 7+ Night Minimum Stay by Room Type"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "room_type": "Entire home/apt",
+                  "listings_count": 1404
+                },
+                {
+                  "room_type": "Private room",
+                  "listings_count": 85
+                },
+                {
+                  "room_type": "Hotel room",
+                  "listings_count": 1
+                }
+              ],
+              "row_count": 3,
+              "columns": [
+                "room_type",
+                "listings_count"
+              ],
+              "dialect": "postgres",
+              "id": "query_09481eb7"
+            }
+          },
+          {
+            "toolName": "display_chart",
+            "toolCallId": "toolu_015dCQBQoXsiJ11Ta445ncfc",
+            "args": {
+              "query_id": "query_09481eb7",
+              "chart_type": "bar",
+              "x_axis_key": "room_type",
+              "x_axis_type": "category",
+              "series": [
+                {
+                  "data_key": "listings_count",
+                  "label": "Listings"
+                }
+              ],
+              "show_data_labels": true,
+              "title": "Listings Requiring 7+ Night Minimum Stay by Room Type"
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_014d5DyrGyKqcDjq97dhaXYe",
+            "args": {
+              "suggestions": [
+                "What is the average minimum stay per room type across all listings?",
+                "How do prices compare between listings with 7+ night minimums vs shorter stays?",
+                "Which neighbourhoods have the most listings with a 7+ night minimum stay?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT room_type, COUNT(*) AS listings\nFROM listings\nWHERE minimum_nights >= 7\nGROUP BY room_type\n",
+        "verification_sql": "SELECT room_type, listings_count AS listings FROM query_09481eb7 ORDER BY listings_count DESC"
+      }
+    },
+    {
+      "name": "m12_fully_available_august",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 35033,
+      "cost": 0.023726399999999998,
+      "duration_ms": 18230,
+      "tool_call_count": 3,
+      "error": null,
+      "details": {
+        "response_text": "**<citation-number id=\"query_deaf45fc\" column=\"listings_fully_available\">1,618</citation-number> listings** have zero unavailable nights across the entire month of August 2026 \u2014 meaning every single day in August is marked as available (not booked or blocked) for those listings.",
+        "actual_data": [
+          {
+            "listings_fully_available_august": 1618
+          }
+        ],
+        "expected_data": [
+          {
+            "listings_fully_available_august": 1618
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01Y47oYsfLM8tfM2yWtW77f1",
+            "args": {
+              "sql_query": "\nSELECT COUNT(DISTINCT listing_id) AS listings_fully_available\nFROM calendar\nWHERE date >= '2026-08-01' AND date <= '2026-08-31'\nGROUP BY listing_id\nHAVING SUM(CASE WHEN available = false THEN 1 ELSE 0 END) = 0\n",
+              "name": "Listings with no unavailable night in August 2026"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                },
+                {
+                  "listings_fully_available": 1
+                }
+              ],
+              "row_count": 1618,
+              "columns": [
+                "listings_fully_available"
+              ],
+              "dialect": "postgres",
+              "id": "query_723002a9"
+            }
+          },
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_017PtqwSd6ioCR5x3HpuDZHa",
+            "args": {
+              "sql_query": "\nSELECT COUNT(*) AS listings_fully_available\nFROM (\n    SELECT listing_id\n    FROM calendar\n    WHERE date >= '2026-08-01' AND date <= '2026-08-31'\n    GROUP BY listing_id\n    HAVING SUM(CASE WHEN available = false THEN 1 ELSE 0 END) = 0\n) sub\n",
+              "name": "Count of listings with no unavailable night in August 2026"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "listings_fully_available": 1618
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "listings_fully_available"
+              ],
+              "dialect": "postgres",
+              "id": "query_deaf45fc"
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01HfwELsdfx3YC2PMLnKgMAu",
+            "args": {
+              "suggestions": [
+                "What share of total listings does that represent?",
+                "How does this compare to other summer months (June, July, September)?",
+                "Which neighbourhoods have the most listings fully available in August?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT COUNT(*) AS listings_fully_available_august\nFROM (\n  SELECT listing_id\n  FROM calendar\n  WHERE date >= '2026-08-01' AND date < '2026-09-01'\n  GROUP BY listing_id\n  HAVING COUNT(*) FILTER (WHERE available) = 31\n) t",
+        "verification_sql": "SELECT listings_fully_available AS listings_fully_available_august FROM query_deaf45fc"
+      }
+    }
+  ],
+  "summary": {
+    "total": 12,
+    "passed": 12,
+    "failed": 0,
+    "total_tokens": 375173,
+    "total_cost": 0.2572026,
+    "total_duration_ms": 175297,
+    "total_duration_s": 175.3,
+    "total_tool_calls": 31,
+    "avg_duration_ms": 14608.0,
+    "avg_tool_calls": 2.6
+  },
+  "by_model": [
+    {
+      "model": "anthropic:claude-sonnet-4-6",
+      "total": 12,
+      "passed": 12,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "total_tokens": 375173,
+      "total_cost": 0.257203,
+      "total_duration_ms": 175297,
+      "avg_duration_ms": 14608.0,
+      "total_tool_calls": 31,
+      "avg_tool_calls": 2.6
+    }
+  ]
+}

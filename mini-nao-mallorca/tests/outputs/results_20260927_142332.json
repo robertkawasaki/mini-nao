@@ -1,0 +1,386 @@
+{
+  "timestamp": "2026-09-27T14:23:32.255336",
+  "results": [
+    {
+      "name": "h01_reviews_over_50",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 22043,
+      "cost": 0.04769324999999999,
+      "duration_ms": 6111,
+      "tool_call_count": 1,
+      "error": null,
+      "details": {
+        "response_text": "<citation-number id=\"query_62a0e00a\" column=\"listings_count\">2,407</citation-number> listings have received more than 50 reviews in total.",
+        "actual_data": [
+          {
+            "listings": 2407
+          }
+        ],
+        "expected_data": [
+          {
+            "listings": 2407
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_011EHkw1mjHN6eX1EmUvSvLJ",
+            "args": {
+              "sql_query": "SELECT COUNT(*) AS listings_count\nFROM listings\nWHERE number_of_reviews > 50",
+              "name": "Listings with more than 50 reviews"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "listings_count": 2407
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "listings_count"
+              ],
+              "dialect": "postgres",
+              "id": "query_62a0e00a"
+            }
+          }
+        ],
+        "reference_sql": "SELECT COUNT(*) AS listings FROM listings WHERE number_of_reviews > 50",
+        "verification_sql": "SELECT listings_count AS listings FROM query_62a0e00a"
+      }
+    },
+    {
+      "name": "h02_pollenca_reviews_last_year",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 22210,
+      "cost": 0.04995,
+      "duration_ms": 9669,
+      "tool_call_count": 2,
+      "error": null,
+      "details": {
+        "response_text": "Listings in Pollen\u00e7a received <citation-number id=\"query_f7952e6b\" column=\"total_reviews_ltm\">9,447</citation-number> reviews in the last 12 months (based on the `number_of_reviews_ltm` counter in the listings snapshot, collected in June 2026).",
+        "actual_data": [
+          {
+            "reviews": 9447
+          }
+        ],
+        "expected_data": [
+          {
+            "reviews": 9447
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01Vdsu9waGnLBMppPmEinxMS",
+            "args": {
+              "sql_query": "\nSELECT SUM(number_of_reviews_ltm) AS total_reviews_ltm\nFROM listings\nWHERE neighbourhood = 'Pollen\u00e7a'\n",
+              "name": "Pollen\u00e7a reviews last 12 months"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "total_reviews_ltm": 9447
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "total_reviews_ltm"
+              ],
+              "dialect": "postgres",
+              "id": "query_f7952e6b"
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01L6uhko46JKN7W9QWTmXFCD",
+            "args": {
+              "suggestions": [
+                "How does Pollen\u00e7a compare to other municipalities by number of reviews in the last year?",
+                "What is the average rating of listings in Pollen\u00e7a?",
+                "How many active listings does Pollen\u00e7a have?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT SUM(number_of_reviews_ltm) AS reviews FROM listings WHERE neighbourhood = 'Pollen\u00e7a'",
+        "verification_sql": "SELECT total_reviews_ltm AS reviews FROM query_f7952e6b"
+      }
+    },
+    {
+      "name": "h03_hosts_5_plus",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 22043,
+      "cost": 0.011361,
+      "duration_ms": 4779,
+      "tool_call_count": 1,
+      "error": null,
+      "details": {
+        "response_text": "<citation-number id=\"query_da0f3901\" column=\"host_count\">391</citation-number> hosts manage 5 or more listings.",
+        "actual_data": [
+          {
+            "hosts": 391
+          }
+        ],
+        "expected_data": [
+          {
+            "hosts": 391
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_018trQzrc8oobwjgoetCWAim",
+            "args": {
+              "sql_query": "\nSELECT COUNT(DISTINCT host_id) AS host_count\nFROM listings\nWHERE calculated_host_listings_count >= 5\n",
+              "name": "Hosts with 5+ listings"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "host_count": 391
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "host_count"
+              ],
+              "dialect": "postgres",
+              "id": "query_da0f3901"
+            }
+          }
+        ],
+        "reference_sql": "SELECT COUNT(DISTINCT host_id) AS hosts FROM listings WHERE calculated_host_listings_count >= 5",
+        "verification_sql": "SELECT host_count AS hosts FROM query_da0f3901"
+      }
+    },
+    {
+      "name": "h04_avg_price_alcudia",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 22100,
+      "cost": 0.01191,
+      "duration_ms": 5014,
+      "tool_call_count": 1,
+      "error": null,
+      "details": {
+        "response_text": "The average base nightly price in Alc\u00fadia is <citation-number id=\"query_232d39cd\" column=\"avg_nightly_price\">598.49</citation-number> EUR (excluding listings with no published price).",
+        "actual_data": [
+          {
+            "avg_price": 598.49
+          }
+        ],
+        "expected_data": [
+          {
+            "avg_price": 598.49
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01A8Sx9bHdFTEEjFoLxaQgVq",
+            "args": {
+              "sql_query": "\nSELECT ROUND(AVG(price), 2) AS avg_nightly_price\nFROM listings\nWHERE neighbourhood = 'Alc\u00fadia'\n  AND price IS NOT NULL\n",
+              "name": "Average nightly price in Alc\u00fadia"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "avg_nightly_price": 598.49
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "avg_nightly_price"
+              ],
+              "dialect": "postgres",
+              "id": "query_232d39cd"
+            }
+          }
+        ],
+        "reference_sql": "SELECT ROUND(AVG(price), 2) AS avg_price FROM listings WHERE neighbourhood = 'Alc\u00fadia' AND price IS NOT NULL",
+        "verification_sql": "SELECT avg_nightly_price AS avg_price FROM query_232d39cd"
+      }
+    },
+    {
+      "name": "h05_pct_not_bookable_aug",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 22439,
+      "cost": 0.0160485,
+      "duration_ms": 12673,
+      "tool_call_count": 2,
+      "error": null,
+      "details": {
+        "response_text": "In August 2026, **<citation-number id=\"query_64363e34\" column=\"pct_not_bookable\">69.1</citation-number>%** of calendar nights are not bookable \u2014 that's <citation-number id=\"query_64363e34\" column=\"not_bookable\">319,197</citation-number> out of <citation-number id=\"query_64363e34\" column=\"total_nights\">461,931</citation-number> total listing-nights.\n\nKeep in mind that \"not bookable\" (`available = false`) includes both nights already booked by guests and nights blocked by the host \u2014 the calendar does not distinguish between the two.",
+        "actual_data": [
+          {
+            "pct_not_bookable": 69.1
+          }
+        ],
+        "expected_data": [
+          {
+            "pct_not_bookable": 69.1
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_01KE5sRZkLxBxEytkJRVcRJR",
+            "args": {
+              "sql_query": "\nSELECT\n    COUNT(*) AS total_nights,\n    SUM(CASE WHEN available = false THEN 1 ELSE 0 END) AS not_bookable,\n    ROUND(100.0 * SUM(CASE WHEN available = false THEN 1 ELSE 0 END) / COUNT(*), 2) AS pct_not_bookable\nFROM calendar\nWHERE date >= '2026-08-01' AND date < '2026-09-01'\n"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "total_nights": 461931,
+                  "not_bookable": 319197,
+                  "pct_not_bookable": 69.1
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "total_nights",
+                "not_bookable",
+                "pct_not_bookable"
+              ],
+              "dialect": "postgres",
+              "id": "query_64363e34"
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01WWgB1NBBwq1yP4vqpATC9S",
+            "args": {
+              "suggestions": [
+                "How does August 2026 occupancy compare to other summer months?",
+                "Which neighbourhoods have the highest not-bookable rate in August 2026?",
+                "What is the estimated revenue for August 2026 based on calendar availability?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE NOT available) / COUNT(*), 2) AS pct_not_bookable\nFROM calendar\nWHERE date >= '2026-08-01' AND date < '2026-09-01'\n",
+        "verification_sql": "SELECT pct_not_bookable FROM query_64363e34"
+      }
+    },
+    {
+      "name": "h06_palma_never_reviewed",
+      "model": "anthropic:claude-sonnet-4-6",
+      "passed": true,
+      "message": "match",
+      "tokens": 22223,
+      "cost": 0.013697250000000001,
+      "duration_ms": 11199,
+      "tool_call_count": 2,
+      "error": null,
+      "details": {
+        "response_text": "There are <citation-number id=\"query_c8e9ce9a\" column=\"listings_never_reviewed\">190</citation-number> listings in Palma de Mallorca that have never received a review (`number_of_reviews = 0`).",
+        "actual_data": [
+          {
+            "listings": 190
+          }
+        ],
+        "expected_data": [
+          {
+            "listings": 190
+          }
+        ],
+        "comparison": null,
+        "tool_calls": [
+          {
+            "toolName": "execute_sql",
+            "toolCallId": "toolu_016xeJAYz1URa48SGkLvQLqq",
+            "args": {
+              "sql_query": "\nSELECT COUNT(*) AS listings_never_reviewed\nFROM listings\nWHERE neighbourhood = 'Palma de Mallorca'\n  AND number_of_reviews = 0\n",
+              "name": "Listings in Palma de Mallorca with no reviews"
+            },
+            "result": {
+              "_version": "1",
+              "data": [
+                {
+                  "listings_never_reviewed": 190
+                }
+              ],
+              "row_count": 1,
+              "columns": [
+                "listings_never_reviewed"
+              ],
+              "dialect": "postgres",
+              "id": "query_c8e9ce9a"
+            }
+          },
+          {
+            "toolName": "suggest_follow_ups",
+            "toolCallId": "toolu_01Pg18xFgB8h373TUpV9XsE3",
+            "args": {
+              "suggestions": [
+                "What percentage of total Palma de Mallorca listings have never been reviewed?",
+                "Show the breakdown of never-reviewed listings by room type in Palma de Mallorca.",
+                "How do never-reviewed listings compare to reviewed ones in terms of price?"
+              ]
+            },
+            "result": {
+              "_version": "1",
+              "success": true
+            }
+          }
+        ],
+        "reference_sql": "SELECT COUNT(*) AS listings FROM listings WHERE neighbourhood = 'Palma de Mallorca' AND number_of_reviews = 0",
+        "verification_sql": "SELECT listings_never_reviewed AS listings FROM query_c8e9ce9a"
+      }
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "total_tokens": 133058,
+    "total_cost": 0.15066,
+    "total_duration_ms": 49445,
+    "total_duration_s": 49.45,
+    "total_tool_calls": 9,
+    "avg_duration_ms": 8241.0,
+    "avg_tool_calls": 1.5
+  },
+  "by_model": [
+    {
+      "model": "anthropic:claude-sonnet-4-6",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "total_tokens": 133058,
+      "total_cost": 0.15066,
+      "total_duration_ms": 49445,
+      "avg_duration_ms": 8241.0,
+      "total_tool_calls": 9,
+      "avg_tool_calls": 1.5
+    }
+  ]
+}
